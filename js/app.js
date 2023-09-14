@@ -19,21 +19,20 @@ $(document).ready(function() {
       ]
     });
   });
+  //Adding new users
   $(document).on('submit', '#addUser', function(e) {
     e.preventDefault();
-    var city = $('#addCityField').val();
-    var username = $('#addUserField').val();
-    var mobile = $('#addMobileField').val();
-    var email = $('#addEmailField').val();
-    if (city != '' && username != '' && mobile != '' && email != '') {
+    var id = $('#addID').val();
+    var dept = $('#addDept').val();
+    var name = $('#addName').val();
+    if (id!= '' && dept != '' && name != '') {
       $.ajax({
         url: "add_user.php",
         type: "post",
         data: {
-          city: city,
-          username: username,
-          mobile: mobile,
-          email: email
+          id: id,
+          department: department,
+          name: name,
         },
         success: function(data) {
           var json = JSON.parse(data);
@@ -51,25 +50,20 @@ $(document).ready(function() {
       alert('Fill all the required fields');
     }
   });
+  //Update existing user data
   $(document).on('submit', '#updateUser', function(e) {
     e.preventDefault();
-    //var tr = $(this).closest('tr');
-    var city = $('#cityField').val();
-    var username = $('#nameField').val();
-    var mobile = $('#mobileField').val();
-    var email = $('#emailField').val();
-    var trid = $('#trid').val();
     var id = $('#id').val();
-    if (city != '' && username != '' && mobile != '' && email != '') {
+    var dept = $('#department').val();
+    var name = $('#name').val();
+    if (id != '' && dept != '' && name != '') {
       $.ajax({
         url: "update_user.php",
         type: "post",
         data: {
-          city: city,
-          username: username,
-          mobile: mobile,
-          email: email,
-          id: id
+          id: id,
+          dept: dept,
+          name: name
         },
         success: function(data) {
           var json = JSON.parse(data);
@@ -78,7 +72,7 @@ $(document).ready(function() {
             table = $('#example').DataTable();
             var button = '<td><a href="javascript:void();" data-id="' + id + '" class="btn btn-info btn-sm editbtn">Edit</a>  <a href="#!"  data-id="' + id + '"  class="btn btn-danger btn-sm deleteBtn">Delete</a></td>';
             var row = table.row("[id='" + trid + "']");
-            row.row("[id='" + trid + "']").data([id, username, email, mobile, city, button]);
+            row.row("[id='" + trid + "']").data([id, department, name,button]);
             $('#exampleModal').modal('hide');
           } else {
             alert('failed');
@@ -92,10 +86,8 @@ $(document).ready(function() {
   $('#example').on('click', '.editbtn ', function(event) {
     var table = $('#example').DataTable();
     var trid = $(this).closest('tr').attr('id');
-    // console.log(selectedRow);
     var id = $(this).data('id');
     $('#exampleModal').modal('show');
-
     $.ajax({
       url: "get_single_data.php",
       data: {
@@ -104,16 +96,13 @@ $(document).ready(function() {
       type: 'post',
       success: function(data) {
         var json = JSON.parse(data);
-        $('#nameField').val(json.username);
-        $('#emailField').val(json.email);
-        $('#mobileField').val(json.mobile);
-        $('#cityField').val(json.city);
-        $('#id').val(id);
-        $('#trid').val(trid);
+        $('#id').val(json.id);
+        $('#department').val(json.department);
+        $('#name').val(json.name);
       }
     })
   });
-
+//deleting users
   $(document).on('click', '.deleteBtn', function(event) {
     var table = $('#example').DataTable();
     event.preventDefault();
@@ -129,10 +118,6 @@ $(document).ready(function() {
           var json = JSON.parse(data);
           status = json.status;
           if (status == 'success') {
-            //table.fnDeleteRow( table.$('#' + id)[0] );
-            //$("#example tbody").find(id).remove();
-            //table.row($(this).closest("tr")) .remove();
-            $("#" + id).closest('tr').remove();
           } else {
             alert('Failed');
             return;
@@ -143,5 +128,3 @@ $(document).ready(function() {
       return null;
     }
   })
-
-  
