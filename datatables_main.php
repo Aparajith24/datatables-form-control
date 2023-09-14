@@ -1,11 +1,11 @@
 <?php
  /*
   * Plugin Name: DataTables
-  * Plugin URI:  https://www.succeedlearn.com/
+  * Plugin URI:  
   * Description: Plugin to show employee database with CRUD operations
   * Version:     1.0
-  * Author:      Succeed Technologies
-  * Author URI:  https://www.succeedlearn.com/
+  * Author:      Aparajith L
+  * Author URI:  
 */
 function include_datatable(){
   include_once("view.php");
